@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { Calendar, ArrowLeft, CheckCircle2 } from 'lucide-react';
+import { api } from '../lib/api';
 
 export function Register() {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ export function Register() {
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const newErrors: Record<string, string> = {};
 
@@ -47,38 +48,11 @@ export function Register() {
       return;
     }
     try {
-      const usuariosExistentesTexto = localStorage.getItem('usuarios_cadastrados') || '[]';
-
-      const listaDeUsuarios = JSON.parse(usuariosExistentesTexto);
-
-      const emailJaExiste = listaDeUsuarios.some(
-        (u: { email?: string }) => u.email === formData.email
-      );
-      if (emailJaExiste) {
-        setErrors({ email: 'Este email já está cadastrado!' });
-        return;
-      }
-
-      const novoUsuario = {
-        id: crypto.randomUUID(),
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
-      };
-
-      listaDeUsuarios.push(novoUsuario);
-
-      localStorage.setItem('usuarios_cadastrados', JSON.stringify(listaDeUsuarios));
-
-      localStorage.setItem('usuario_logado', JSON.stringify(novoUsuario));
-
-      alert('Conta criada com sucesso!');
-      navigate('/dashboard');
+      const user = await api.register(formData.name, formData.email, formData.password);
+      navigate(user.role === 'ADMIN' ? '/admin' : '/dashboard');
     } catch (error) {
-      console.error('Erro ao registrar usuário:', error);
-      alert('Houve um erro técnico ao salvar seu cadastro no navegador.');
+      setErrors({ api: error instanceof Error ? error.message : 'Não foi possível criar a conta.' });
     }
-    // redundant navigation removed (already navigates inside the try on success)
   };
 
   const passwordStrength = () => {
@@ -219,6 +193,8 @@ export function Register() {
             <Button type="submit" className="w-full" size="lg">
               Criar Conta
             </Button>
+
+            {errors.api && <p className="text-sm text-red-400">{errors.api}</p>}
 
             <div className="text-center text-sm text-white/60">
               Já tem uma conta?{' '}

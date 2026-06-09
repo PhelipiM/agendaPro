@@ -1,55 +1,24 @@
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { Sidebar } from '../components/Sidebar';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Calendar, Clock, Plus, ArrowRight } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { api, type ClientDashboardData } from '../lib/api';
 
 export function ClientDashboard() {
   const navigate = useNavigate();
 
-  const upcomingAppointments = [
-    {
-      id: 1,
-      service: 'Corte de Cabelo',
-      date: '2026-05-15',
-      time: '10:00',
-      professional: 'Carlos Silva',
-      status: 'confirmed',
-    },
-    {
-      id: 2,
-      service: 'Massagem Relaxante',
-      date: '2026-05-18',
-      time: '14:30',
-      professional: 'Ana Santos',
-      status: 'confirmed',
-    },
-    {
-      id: 3,
-      service: 'Consulta Nutricional',
-      date: '2026-05-22',
-      time: '09:00',
-      professional: 'Dr. Pedro Costa',
-      status: 'pending',
-    },
-  ];
+  const [dashboard, setDashboard] = useState<ClientDashboardData | null>(null);
 
-  const recentAppointments = [
-    {
-      id: 4,
-      service: 'Limpeza de Pele',
-      date: '2026-05-08',
-      time: '15:00',
-      status: 'completed',
-    },
-    {
-      id: 5,
-      service: 'Manicure',
-      date: '2026-05-05',
-      time: '11:30',
-      status: 'completed',
-    },
-  ];
+  useEffect(() => {
+    const loadDashboard = async () => {
+      const data = await api.clientDashboard();
+      setDashboard(data);
+    };
+
+    void loadDashboard();
+  }, []);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -103,7 +72,7 @@ export function ClientDashboard() {
                   <Calendar className="w-6 h-6 text-violet-400" />
                 </div>
                 <div>
-                  <p className="text-2xl text-white">{upcomingAppointments.length}</p>
+                  <p className="text-2xl text-white">{dashboard?.upcomingCount ?? 0}</p>
                   <p className="text-sm text-white/60">Próximos</p>
                 </div>
               </div>
@@ -115,7 +84,7 @@ export function ClientDashboard() {
                   <Clock className="w-6 h-6 text-green-400" />
                 </div>
                 <div>
-                  <p className="text-2xl text-white">{recentAppointments.length}</p>
+                  <p className="text-2xl text-white">{dashboard?.recentCount ?? 0}</p>
                   <p className="text-sm text-white/60">Realizados</p>
                 </div>
               </div>
@@ -128,7 +97,7 @@ export function ClientDashboard() {
                 </div>
                 <div>
                   <p className="text-2xl text-white">
-                    {upcomingAppointments.length + recentAppointments.length}
+                    {dashboard?.totalCount ?? 0}
                   </p>
                   <p className="text-sm text-white/60">Total</p>
                 </div>
@@ -141,7 +110,7 @@ export function ClientDashboard() {
               <h2 className="text-xl text-white">Próximos Agendamentos</h2>
             </div>
             <div className="space-y-3">
-              {upcomingAppointments.map(appointment => (
+              {(dashboard?.upcomingAppointments ?? []).map(appointment => (
                 <Card
                   key={appointment.id}
                   className="hover:border-white/20 transition-colors cursor-pointer"
@@ -190,7 +159,7 @@ export function ClientDashboard() {
               </Button>
             </div>
             <div className="space-y-3">
-              {recentAppointments.map(appointment => (
+              {(dashboard?.recentAppointments ?? []).map(appointment => (
                 <Card
                   key={appointment.id}
                   className="hover:border-white/20 transition-colors cursor-pointer"

@@ -4,6 +4,8 @@ import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { Plus, Edit2, Trash2, Clock, DollarSign } from 'lucide-react';
+import { useEffect } from 'react';
+import { api, type ServiceItem } from '../lib/api';
 
 export function ServiceManagement() {
   const [showForm, setShowForm] = useState(false);
@@ -14,16 +16,18 @@ export function ServiceManagement() {
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const [services, setServices] = useState([
-    { id: 1, name: 'Corte de Cabelo', duration: '30 min', price: 'R$ 50,00' },
-    { id: 2, name: 'Massagem Relaxante', duration: '60 min', price: 'R$ 120,00' },
-    { id: 3, name: 'Consulta Nutricional', duration: '45 min', price: 'R$ 150,00' },
-    { id: 4, name: 'Limpeza de Pele', duration: '90 min', price: 'R$ 200,00' },
-    { id: 5, name: 'Manicure', duration: '40 min', price: 'R$ 40,00' },
-    { id: 6, name: 'Pedicure', duration: '40 min', price: 'R$ 45,00' },
-  ]);
+  const [services, setServices] = useState<ServiceItem[]>([]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    const loadServices = async () => {
+      const items = await api.services();
+      setServices(items);
+    };
+
+    void loadServices();
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const newErrors: Record<string, string> = {};
 
@@ -42,20 +46,15 @@ export function ServiceManagement() {
       return;
     }
 
-    const newService = {
-      id: services.length + 1,
-      name: formData.name,
-      duration: formData.duration,
-      price: formData.price,
-    };
-
-    setServices([...services, newService]);
+    const newService = await api.createService(formData);
+    setServices(previous => [...previous, newService]);
     setFormData({ name: '', duration: '', price: '' });
     setShowForm(false);
   };
 
-  const handleDelete = (id: number) => {
-    setServices(services.filter(s => s.id !== id));
+  const handleDelete = async (id: string) => {
+    await api.deleteService(id);
+    setServices(previous => previous.filter(service => service.id !== id));
   };
 
   return (

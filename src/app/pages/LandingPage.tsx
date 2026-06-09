@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { Calendar, Clock, Users, TrendingUp, CheckCircle2, Sparkles } from 'lucide-react';
 

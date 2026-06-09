@@ -1,6 +1,8 @@
 import { Sidebar } from '../components/Sidebar';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
+import { useEffect, useState } from 'react';
+import { api, type AdminDashboardData } from '../lib/api';
 import {
   Calendar,
   DollarSign,
@@ -12,69 +14,16 @@ import {
 } from 'lucide-react';
 
 export function AdminDashboard() {
-  const appointments = [
-    {
-      id: 1,
-      client: 'Maria Silva',
-      service: 'Corte de Cabelo',
-      date: '2026-05-12',
-      time: '10:00',
-      price: 'R$ 50,00',
-      status: 'confirmed',
-    },
-    {
-      id: 2,
-      client: 'João Santos',
-      service: 'Massagem Relaxante',
-      date: '2026-05-12',
-      time: '14:30',
-      price: 'R$ 120,00',
-      status: 'pending',
-    },
-    {
-      id: 3,
-      client: 'Ana Costa',
-      service: 'Consulta Nutricional',
-      date: '2026-05-13',
-      time: '09:00',
-      price: 'R$ 150,00',
-      status: 'confirmed',
-    },
-    {
-      id: 4,
-      client: 'Pedro Lima',
-      service: 'Limpeza de Pele',
-      date: '2026-05-13',
-      time: '15:00',
-      price: 'R$ 200,00',
-      status: 'confirmed',
-    },
-    {
-      id: 5,
-      client: 'Carla Mendes',
-      service: 'Manicure',
-      date: '2026-05-14',
-      time: '11:30',
-      price: 'R$ 40,00',
-      status: 'pending',
-    },
-    {
-      id: 6,
-      client: 'Roberto Alves',
-      service: 'Pedicure',
-      date: '2026-05-14',
-      time: '16:00',
-      price: 'R$ 45,00',
-      status: 'confirmed',
-    },
-  ];
+  const [dashboard, setDashboard] = useState<AdminDashboardData | null>(null);
 
-  const metrics = {
-    totalAppointments: 145,
-    todayAppointments: 8,
-    totalRevenue: 12450.0,
-    activeClients: 67,
-  };
+  useEffect(() => {
+    const loadDashboard = async () => {
+      const data = await api.adminDashboard();
+      setDashboard(data);
+    };
+
+    void loadDashboard();
+  }, []);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -134,7 +83,7 @@ export function AdminDashboard() {
                 </div>
                 <TrendingUp className="w-5 h-5 text-green-400" />
               </div>
-              <p className="text-3xl text-white mb-1">{metrics.totalAppointments}</p>
+              <p className="text-3xl text-white mb-1">{dashboard?.totalAppointments ?? 0}</p>
               <p className="text-sm text-white/60">Total de Agendamentos</p>
             </Card>
 
@@ -145,7 +94,7 @@ export function AdminDashboard() {
                 </div>
                 <TrendingUp className="w-5 h-5 text-green-400" />
               </div>
-              <p className="text-3xl text-white mb-1">{metrics.todayAppointments}</p>
+              <p className="text-3xl text-white mb-1">{dashboard?.todayAppointments ?? 0}</p>
               <p className="text-sm text-white/60">Hoje</p>
             </Card>
 
@@ -157,7 +106,7 @@ export function AdminDashboard() {
                 <TrendingUp className="w-5 h-5 text-green-400" />
               </div>
               <p className="text-3xl text-white mb-1">
-                R$ {metrics.totalRevenue.toLocaleString('pt-BR')}
+                R$ {(dashboard?.totalRevenue ?? 0).toLocaleString('pt-BR')}
               </p>
               <p className="text-sm text-white/60">Faturamento Estimado</p>
             </Card>
@@ -169,7 +118,7 @@ export function AdminDashboard() {
                 </div>
                 <TrendingUp className="w-5 h-5 text-green-400" />
               </div>
-              <p className="text-3xl text-white mb-1">{metrics.activeClients}</p>
+              <p className="text-3xl text-white mb-1">{dashboard?.activeClients ?? 0}</p>
               <p className="text-sm text-white/60">Clientes Ativos</p>
             </Card>
           </div>
@@ -201,7 +150,7 @@ export function AdminDashboard() {
                   </tr>
                 </thead>
                 <tbody>
-                  {appointments.map(appointment => (
+                  {(dashboard?.appointments ?? []).map(appointment => (
                     <tr
                       key={appointment.id}
                       className="border-b border-white/5 hover:bg-white/5 transition-colors"

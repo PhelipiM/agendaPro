@@ -4,6 +4,8 @@ import { Sidebar } from '../components/Sidebar';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Calendar, Clock, CheckCircle2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useEffect } from 'react';
+import { api, type ServiceItem } from '../lib/api';
 
 export function NewAppointment() {
   const navigate = useNavigate();
@@ -12,16 +14,24 @@ export function NewAppointment() {
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
 
-  const services = [
-    { id: '1', name: 'Corte de Cabelo', duration: '30 min', price: 'R$ 50,00' },
-    { id: '2', name: 'Massagem Relaxante', duration: '60 min', price: 'R$ 120,00' },
-    { id: '3', name: 'Consulta Nutricional', duration: '45 min', price: 'R$ 150,00' },
-    { id: '4', name: 'Limpeza de Pele', duration: '90 min', price: 'R$ 200,00' },
-    { id: '5', name: 'Manicure', duration: '40 min', price: 'R$ 40,00' },
-    { id: '6', name: 'Pedicure', duration: '40 min', price: 'R$ 45,00' },
-  ];
+  const [services, setServices] = useState<ServiceItem[]>([]);
+  const [loadingServices, setLoadingServices] = useState(true);
+  const [submitError, setSubmitError] = useState('');
 
   const [currentMonth, setCurrentMonth] = useState(new Date(2026, 4, 1));
+
+  useEffect(() => {
+    const loadServices = async () => {
+      try {
+        const items = await api.services();
+        setServices(items);
+      } finally {
+        setLoadingServices(false);
+      }
+    };
+
+    void loadServices();
+  }, []);
 
   const getDaysInMonth = (date: Date) => {
     const year = date.getFullYear();
@@ -62,16 +72,13 @@ export function NewAppointment() {
     '18:30',
   ];
 
-  const handleConfirm = () => {
-    //função para enviar os dados para o backend (a ser implementada)
-    const serviceData = {
-      serviceId: selectedService,
-      date: selectedDate,
-      time: selectedTime,
-    };
-    // debug log removed
-
-    navigate('/dashboard');
+  const handleConfirm = async () => {
+    try {
+      await api.createAppointment({ serviceId: selectedService, date: selectedDate, time: selectedTime });
+      navigate('/dashboard');
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : 'Não foi possível concluir o agendamento.');
+    }
   };
 
   const nextMonth = () => {
@@ -118,6 +125,7 @@ export function NewAppointment() {
           {step === 1 && (
             <div>
               <h2 className="text-xl text-white mb-4">Selecione o serviço</h2>
+              {loadingServices && <p className="text-white/60 mb-4">Carregando serviços...</p>}
               <div className="grid md:grid-cols-2 gap-4 mb-6">
                 {services.map(service => (
                   <Card
@@ -231,6 +239,7 @@ export function NewAppointment() {
                   Continuar
                 </Button>
               </div>
+              {submitError && <p className="mt-4 text-sm text-red-400">{submitError}</p>}
             </div>
           )}
 

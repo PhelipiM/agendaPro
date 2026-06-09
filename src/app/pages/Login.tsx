@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { Calendar, ArrowLeft } from 'lucide-react';
+import { api } from '../lib/api';
 
 export function Login() {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ export function Login() {
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const newErrors: Record<string, string> = {};
 
@@ -37,36 +38,10 @@ export function Login() {
     }
 
     try {
-      const usuariosExistentesTexto = localStorage.getItem('usuarios_cadastrados') || '[]';
-      const listaDeUsuarios = JSON.parse(usuariosExistentesTexto);
-
-      const usuarioEncontrado = listaDeUsuarios.find(
-        (u: { email?: string; password?: string; id?: string; name?: string }) =>
-          u.email === formData.email
-      );
-
-      if (!usuarioEncontrado) {
-        setErrors({ email: 'Este e-mail não está cadastrado.' });
-        return;
-      }
-
-      if (usuarioEncontrado.password !== formData.password) {
-        setErrors({ password: 'Senha incorreta.' });
-        return;
-      }
-
-      const sessãoUsuario = {
-        id: usuarioEncontrado.id,
-        name: usuarioEncontrado.name,
-        email: usuarioEncontrado.email,
-      };
-
-      localStorage.setItem('usuario_logado', JSON.stringify(sessãoUsuario));
-
-      navigate('/dashboard');
+      const user = await api.login(formData.email, formData.password);
+      navigate(user.role === 'ADMIN' ? '/admin' : '/dashboard');
     } catch (error) {
-      console.error('Erro ao autenticar:', error);
-      setErrors({ api: 'Erro no navegador ao tentar fazer login.' });
+      setErrors({ api: error instanceof Error ? error.message : 'Erro ao tentar fazer login.' });
     }
   };
 
@@ -136,6 +111,8 @@ export function Login() {
             <Button type="submit" className="w-full" size="lg">
               Entrar
             </Button>
+
+            {errors.api && <p className="text-sm text-red-400">{errors.api}</p>}
 
             <div className="text-center text-sm text-white/60">
               Não tem uma conta?{' '}

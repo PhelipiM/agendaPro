@@ -1,6 +1,7 @@
-import { useNavigate, useLocation } from 'react-router';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Calendar, Home, Clock, LogOut, Settings, User } from 'lucide-react';
 import { cn } from '../lib/utils';
+import { api } from '../lib/api';
 
 interface SidebarProps {
   isAdmin?: boolean;
@@ -9,6 +10,14 @@ interface SidebarProps {
 export function Sidebar({ isAdmin = false }: SidebarProps) {
   const navigate = useNavigate();
   const location = useLocation();
+
+  const handleLogout = async () => {
+    try {
+      await api.logout();
+    } finally {
+      navigate('/');
+    }
+  };
 
   const clientLinks = [
     { icon: Home, label: 'Dashboard', path: '/dashboard' },
@@ -61,7 +70,7 @@ export function Sidebar({ isAdmin = false }: SidebarProps) {
 
       <div className="p-4 border-t border-white/5">
         <button
-          onClick={() => navigate('/')}
+          onClick={handleLogout}
           className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-white/60 hover:bg-white/5 hover:text-white transition-all duration-200"
         >
           <LogOut className="w-5 h-5" />

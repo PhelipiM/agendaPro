@@ -3,102 +3,24 @@ import { Sidebar } from '../components/Sidebar';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Calendar, Clock, CheckCircle2, XCircle, AlertCircle, Filter } from 'lucide-react';
+import { useEffect } from 'react';
+import { api, type HistoryData } from '../lib/api';
 
 export function History() {
   const [filter, setFilter] = useState('all');
 
-  const appointments = [
-    {
-      id: 1,
-      service: 'Corte de Cabelo',
-      date: '2026-05-08',
-      time: '10:00',
-      professional: 'Carlos Silva',
-      price: 'R$ 50,00',
-      status: 'completed',
-    },
-    {
-      id: 2,
-      service: 'Massagem Relaxante',
-      date: '2026-05-05',
-      time: '14:30',
-      professional: 'Ana Santos',
-      price: 'R$ 120,00',
-      status: 'completed',
-    },
-    {
-      id: 3,
-      service: 'Consulta Nutricional',
-      date: '2026-05-03',
-      time: '09:00',
-      professional: 'Dr. Pedro Costa',
-      price: 'R$ 150,00',
-      status: 'cancelled',
-    },
-    {
-      id: 4,
-      service: 'Limpeza de Pele',
-      date: '2026-04-28',
-      time: '15:00',
-      professional: 'Marina Oliveira',
-      price: 'R$ 200,00',
-      status: 'completed',
-    },
-    {
-      id: 5,
-      service: 'Manicure',
-      date: '2026-04-25',
-      time: '11:30',
-      professional: 'Julia Lima',
-      price: 'R$ 40,00',
-      status: 'completed',
-    },
-    {
-      id: 6,
-      service: 'Pedicure',
-      date: '2026-04-22',
-      time: '16:00',
-      professional: 'Julia Lima',
-      price: 'R$ 45,00',
-      status: 'completed',
-    },
-    {
-      id: 7,
-      service: 'Corte de Cabelo',
-      date: '2026-04-18',
-      time: '10:30',
-      professional: 'Carlos Silva',
-      price: 'R$ 50,00',
-      status: 'cancelled',
-    },
-    {
-      id: 8,
-      service: 'Massagem Relaxante',
-      date: '2026-04-15',
-      time: '14:00',
-      professional: 'Ana Santos',
-      price: 'R$ 120,00',
-      status: 'completed',
-    },
-    {
-      id: 9,
-      service: 'Consulta Nutricional',
-      date: '2026-05-15',
-      time: '09:00',
-      professional: 'Dr. Pedro Costa',
-      price: 'R$ 150,00',
-      status: 'pending',
-    },
-    {
-      id: 10,
-      service: 'Limpeza de Pele',
-      date: '2026-05-18',
-      time: '15:00',
-      professional: 'Marina Oliveira',
-      price: 'R$ 200,00',
-      status: 'pending',
-    },
-  ];
+  const [history, setHistory] = useState<HistoryData | null>(null);
+
+  useEffect(() => {
+    const loadHistory = async () => {
+      const data = await api.history();
+      setHistory(data);
+    };
+
+    void loadHistory();
+  }, []);
+
+  const appointments = history?.items ?? [];
 
   const filteredAppointments = appointments.filter(app => {
     if (filter === 'all') return true;
@@ -135,10 +57,10 @@ export function History() {
   };
 
   const stats = {
-    total: appointments.length,
-    completed: appointments.filter(a => a.status === 'completed').length,
-    cancelled: appointments.filter(a => a.status === 'cancelled').length,
-    pending: appointments.filter(a => a.status === 'pending').length,
+    total: history?.counts.total ?? 0,
+    completed: history?.counts.completed ?? 0,
+    cancelled: history?.counts.cancelled ?? 0,
+    pending: history?.counts.pending ?? 0,
   };
 
   return (

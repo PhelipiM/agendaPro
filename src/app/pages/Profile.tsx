@@ -5,13 +5,13 @@ import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { User, Mail, Phone, MapPin, Camera, Save } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { api } from '../lib/api';
 
 export function Profile() {
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
 
   const [formData, setFormData] = useState({
-    id: '',
     name: '',
     email: '',
     phone: '',
@@ -19,28 +19,42 @@ export function Profile() {
     bio: '',
   });
 
+  const [appointmentCount, setAppointmentCount] = useState(0);
+
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
-    const usuarioLogadoTexto = localStorage.getItem('usuario_logado');
+    let mounted = true;
 
-    if (usuarioLogadoTexto) {
-      const usuario = JSON.parse(usuarioLogadoTexto);
+    const loadProfile = async () => {
+      try {
+        const [user, history] = await Promise.all([api.me(), api.history()]);
 
-      setFormData({
-        id: usuario.id || '',
-        name: usuario.name || '',
-        email: usuario.email || '',
-        phone: usuario.phone || '(00) 00000-0000',
-        address: usuario.address || 'Não informado',
-        bio: usuario.bio || 'Cliente AgendaPro desde 2026',
-      });
-    } else {
-      navigate('/login');
-    }
+        if (!mounted) {
+          return;
+        }
+
+        setFormData({
+          name: user.name || '',
+          email: user.email || '',
+          phone: user.phone || '(00) 00000-0000',
+          address: user.address || 'Não informado',
+          bio: user.bio || 'Cliente AgendaPro desde 2026',
+        });
+        setAppointmentCount(history.counts.total);
+      } catch {
+        navigate('/login');
+      }
+    };
+
+    void loadProfile();
+
+    return () => {
+      mounted = false;
+    };
   }, [navigate]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const newErrors: Record<string, string> = {};
 
@@ -59,29 +73,17 @@ export function Profile() {
     }
 
     try {
-      localStorage.setItem('usuario_logado', JSON.stringify(formData));
-      const usuariosExistentesTexto = localStorage.getItem('usuarios_cadastrados') || '[]';
-      const listaDeUsuarios = JSON.parse(usuariosExistentesTexto);
-      const indexUsuario = listaDeUsuarios.findIndex((u: { id?: string }) => u.id === formData.id);
-
-      if (indexUsuario !== -1) {
-        listaDeUsuarios[indexUsuario] = {
-          ...listaDeUsuarios[indexUsuario],
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          address: formData.address,
-          bio: formData.bio,
-        };
-
-        localStorage.setItem('usuarios_cadastrados', JSON.stringify(listaDeUsuarios));
-      }
-
-      alert('Perfil atualizado com sucesso!');
+      const updatedUser = await api.updateProfile(formData);
+      setFormData({
+        name: updatedUser.name || '',
+        email: updatedUser.email || '',
+        phone: updatedUser.phone || '(00) 00000-0000',
+        address: updatedUser.address || 'Não informado',
+        bio: updatedUser.bio || 'Cliente AgendaPro desde 2026',
+      });
       setIsEditing(false);
     } catch (error) {
-      console.error('Erro ao salvar perfil:', error);
-      alert('Não foi possível salvar as alterações.');
+      setErrors({ api: error instanceof Error ? error.message : 'Não foi possível salvar as alterações.' });
     }
   };
 
@@ -124,7 +126,7 @@ export function Profile() {
                   </div>
                   <div>
                     <p className="text-sm text-white/60 mb-1">Total de agendamentos</p>
-                    <p className="text-white">24</p>
+                    <p className="text-white">{appointmentCount}</p>
                   </div>
                   <div>
                     <p className="text-sm text-white/60 mb-1">Status</p>
@@ -208,6 +210,8 @@ export function Profile() {
                       Cancelar
                     </Button>
                   </div>
+
+                  {errors.api && <p className="text-sm text-red-400">{errors.api}</p>}
                 </form>
               ) : (
                 <div className="space-y-6">
