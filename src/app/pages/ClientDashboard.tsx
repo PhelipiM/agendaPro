@@ -86,7 +86,9 @@ export function ClientDashboard() {
           <div className="flex items-center justify-between mb-8">
             <div>
               <h1 className="text-3xl text-white mb-2">Dashboard</h1>
-              <p className="text-white/60">Bem-vindo de volta! Aqui estão seus próximos agendamentos.</p>
+              <p className="text-white/60">
+                Bem-vindo de volta! Aqui estão seus próximos agendamentos.
+              </p>
             </div>
             <Button onClick={() => navigate('/appointment/new')} className="gap-2">
               <Plus className="w-5 h-5" />
@@ -139,8 +141,11 @@ export function ClientDashboard() {
               <h2 className="text-xl text-white">Próximos Agendamentos</h2>
             </div>
             <div className="space-y-3">
-              {upcomingAppointments.map((appointment) => (
-                <Card key={appointment.id} className="hover:border-white/20 transition-colors cursor-pointer">
+              {upcomingAppointments.map(appointment => (
+                <Card
+                  key={appointment.id}
+                  className="hover:border-white/20 transition-colors cursor-pointer"
+                >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
                       <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center">
@@ -185,8 +190,11 @@ export function ClientDashboard() {
               </Button>
             </div>
             <div className="space-y-3">
-              {recentAppointments.map((appointment) => (
-                <Card key={appointment.id} className="hover:border-white/20 transition-colors cursor-pointer">
+              {recentAppointments.map(appointment => (
+                <Card
+                  key={appointment.id}
+                  className="hover:border-white/20 transition-colors cursor-pointer"
+                >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
                       <div className="w-14 h-14 rounded-xl bg-white/5 flex items-center justify-center">

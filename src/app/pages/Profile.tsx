@@ -4,29 +4,29 @@ import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { User, Mail, Phone, MapPin, Camera, Save } from 'lucide-react';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 export function Profile() {
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
-  
+
   const [formData, setFormData] = useState({
-    id: '', 
+    id: '',
     name: '',
     email: '',
     phone: '',
     address: '',
     bio: '',
   });
-  
+
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     const usuarioLogadoTexto = localStorage.getItem('usuario_logado');
-    
+
     if (usuarioLogadoTexto) {
       const usuario = JSON.parse(usuarioLogadoTexto);
-      
+
       setFormData({
         id: usuario.id || '',
         name: usuario.name || '',
@@ -62,7 +62,7 @@ export function Profile() {
       localStorage.setItem('usuario_logado', JSON.stringify(formData));
       const usuariosExistentesTexto = localStorage.getItem('usuarios_cadastrados') || '[]';
       const listaDeUsuarios = JSON.parse(usuariosExistentesTexto);
-      const indexUsuario = listaDeUsuarios.findIndex((u: any) => u.id === formData.id);
+      const indexUsuario = listaDeUsuarios.findIndex((u: { id?: string }) => u.id === formData.id);
 
       if (indexUsuario !== -1) {
         listaDeUsuarios[indexUsuario] = {
@@ -71,17 +71,16 @@ export function Profile() {
           email: formData.email,
           phone: formData.phone,
           address: formData.address,
-          bio: formData.bio
+          bio: formData.bio,
         };
-        
+
         localStorage.setItem('usuarios_cadastrados', JSON.stringify(listaDeUsuarios));
       }
 
       alert('Perfil atualizado com sucesso!');
       setIsEditing(false);
-
     } catch (error) {
-      console.error("Erro ao salvar perfil:", error);
+      console.error('Erro ao salvar perfil:', error);
       alert('Não foi possível salvar as alterações.');
     }
   };
@@ -97,11 +96,7 @@ export function Profile() {
               <h1 className="text-3xl text-white mb-2">Meu Perfil</h1>
               <p className="text-white/60">Gerencie suas informações pessoais</p>
             </div>
-            {!isEditing && (
-              <Button onClick={() => setIsEditing(true)}>
-                Editar Perfil
-              </Button>
-            )}
+            {!isEditing && <Button onClick={() => setIsEditing(true)}>Editar Perfil</Button>}
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
@@ -151,7 +146,7 @@ export function Profile() {
                     <Input
                       type="text"
                       value={formData.name}
-                      onChange={(e) => {
+                      onChange={e => {
                         setFormData({ ...formData, name: e.target.value });
                         setErrors({ ...errors, name: '' });
                       }}
@@ -164,7 +159,7 @@ export function Profile() {
                     <Input
                       type="email"
                       value={formData.email}
-                      onChange={(e) => {
+                      onChange={e => {
                         setFormData({ ...formData, email: e.target.value });
                         setErrors({ ...errors, email: '' });
                       }}
@@ -177,7 +172,7 @@ export function Profile() {
                     <Input
                       type="tel"
                       value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      onChange={e => setFormData({ ...formData, phone: e.target.value })}
                     />
                   </div>
 
@@ -186,7 +181,7 @@ export function Profile() {
                     <Input
                       type="text"
                       value={formData.address}
-                      onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                      onChange={e => setFormData({ ...formData, address: e.target.value })}
                     />
                   </div>
 
@@ -194,7 +189,7 @@ export function Profile() {
                     <label className="block text-sm text-white/80 mb-2">Bio</label>
                     <textarea
                       value={formData.bio}
-                      onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
+                      onChange={e => setFormData({ ...formData, bio: e.target.value })}
                       className="w-full px-4 py-3 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 text-white placeholder:text-white/40 focus:outline-none focus:border-white/30 focus:bg-white/[0.07] transition-all duration-200 min-h-24 resize-none"
                     />
                   </div>

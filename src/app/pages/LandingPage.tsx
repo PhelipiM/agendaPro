@@ -19,9 +19,7 @@ export function LandingPage() {
             <Button variant="ghost" onClick={() => navigate('/login')}>
               Entrar
             </Button>
-            <Button onClick={() => navigate('/register')}>
-              Cadastrar-se
-            </Button>
+            <Button onClick={() => navigate('/register')}>Cadastrar-se</Button>
           </div>
         </div>
       </nav>
@@ -42,8 +40,8 @@ export function LandingPage() {
           </h1>
 
           <p className="text-xl text-white/60 max-w-2xl mx-auto mb-10">
-            Gerencie seus agendamentos com uma plataforma moderna, intuitiva e profissional.
-            Aumente sua produtividade e impressione seus clientes.
+            Gerencie seus agendamentos com uma plataforma moderna, intuitiva e profissional. Aumente
+            sua produtividade e impressione seus clientes.
           </p>
 
           <div className="flex items-center justify-center gap-4">
@@ -68,7 +66,8 @@ export function LandingPage() {
               </div>
               <h3 className="text-xl text-white mb-3">Agendamento Inteligente</h3>
               <p className="text-white/60">
-                Sistema intuitivo que permite seus clientes agendarem horários de forma rápida e fácil.
+                Sistema intuitivo que permite seus clientes agendarem horários de forma rápida e
+                fácil.
               </p>
             </div>
 
@@ -108,9 +107,7 @@ export function LandingPage() {
                 <span className="text-2xl text-white">1</span>
               </div>
               <h3 className="text-xl text-white mb-3">Cadastre-se</h3>
-              <p className="text-white/60">
-                Crie sua conta gratuitamente em menos de 1 minuto
-              </p>
+              <p className="text-white/60">Crie sua conta gratuitamente em menos de 1 minuto</p>
             </div>
 
             <div className="text-center">
@@ -118,9 +115,7 @@ export function LandingPage() {
                 <span className="text-2xl text-white">2</span>
               </div>
               <h3 className="text-xl text-white mb-3">Configure</h3>
-              <p className="text-white/60">
-                Adicione seus serviços, horários e preferências
-              </p>
+              <p className="text-white/60">Adicione seus serviços, horários e preferências</p>
             </div>
 
             <div className="text-center">
@@ -128,9 +123,7 @@ export function LandingPage() {
                 <span className="text-2xl text-white">3</span>
               </div>
               <h3 className="text-xl text-white mb-3">Gerencie</h3>
-              <p className="text-white/60">
-                Receba e gerencie seus agendamentos automaticamente
-              </p>
+              <p className="text-white/60">Receba e gerencie seus agendamentos automaticamente</p>
             </div>
           </div>
         </div>
@@ -161,9 +154,7 @@ export function LandingPage() {
                 </div>
                 <span className="text-xl text-white">AgendaPro</span>
               </div>
-              <p className="text-white/50 text-sm">
-                Plataforma SaaS moderna de agendamento online
-              </p>
+              <p className="text-white/50 text-sm">Plataforma SaaS moderna de agendamento online</p>
             </div>
 
             <div>

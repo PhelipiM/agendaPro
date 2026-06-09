@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { Sidebar } from '../components/Sidebar';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
@@ -42,9 +42,24 @@ export function NewAppointment() {
   };
 
   const availableTimes = [
-    '08:00', '08:30', '09:00', '09:30', '10:00', '10:30',
-    '11:00', '11:30', '14:00', '14:30', '15:00', '15:30',
-    '16:00', '16:30', '17:00', '17:30', '18:00', '18:30',
+    '08:00',
+    '08:30',
+    '09:00',
+    '09:30',
+    '10:00',
+    '10:30',
+    '11:00',
+    '11:30',
+    '14:00',
+    '14:30',
+    '15:00',
+    '15:30',
+    '16:00',
+    '16:30',
+    '17:00',
+    '17:30',
+    '18:00',
+    '18:30',
   ];
 
   const handleConfirm = () => {
@@ -54,8 +69,8 @@ export function NewAppointment() {
       date: selectedDate,
       time: selectedTime,
     };
-    console.log('Enviando dados para o backend:', serviceData, selectedDate, selectedTime);
-  
+    // debug log removed
+
     navigate('/dashboard');
   };
 
@@ -79,7 +94,7 @@ export function NewAppointment() {
           </div>
 
           <div className="flex items-center gap-4 mb-8">
-            {[1, 2, 3].map((i) => (
+            {[1, 2, 3].map(i => (
               <div key={i} className="flex items-center gap-2">
                 <div
                   className={`w-10 h-10 rounded-full flex items-center justify-center ${
@@ -93,7 +108,9 @@ export function NewAppointment() {
                 <span className={`text-sm ${step >= i ? 'text-white' : 'text-white/40'}`}>
                   {i === 1 ? 'Serviço' : i === 2 ? 'Data e Hora' : 'Confirmar'}
                 </span>
-                {i < 3 && <div className={`w-12 h-0.5 ${step > i ? 'bg-violet-500' : 'bg-white/10'}`} />}
+                {i < 3 && (
+                  <div className={`w-12 h-0.5 ${step > i ? 'bg-violet-500' : 'bg-white/10'}`} />
+                )}
               </div>
             ))}
           </div>
@@ -102,7 +119,7 @@ export function NewAppointment() {
             <div>
               <h2 className="text-xl text-white mb-4">Selecione o serviço</h2>
               <div className="grid md:grid-cols-2 gap-4 mb-6">
-                {services.map((service) => (
+                {services.map(service => (
                   <Card
                     key={service.id}
                     className={`cursor-pointer transition-all ${
@@ -154,7 +171,7 @@ export function NewAppointment() {
                 </div>
 
                 <div className="grid grid-cols-7 gap-2 mb-2">
-                  {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map((day) => (
+                  {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map(day => (
                     <div key={day} className="text-center text-sm text-white/60 py-2">
                       {day}
                     </div>
@@ -185,7 +202,7 @@ export function NewAppointment() {
                 <Card className="mb-6">
                   <h3 className="text-lg text-white mb-4">Horários disponíveis</h3>
                   <div className="grid grid-cols-4 gap-3">
-                    {availableTimes.map((time) => (
+                    {availableTimes.map(time => (
                       <button
                         key={time}
                         onClick={() => setSelectedTime(time)}
@@ -226,7 +243,7 @@ export function NewAppointment() {
                   <div className="flex items-center justify-between pb-4 border-b border-white/10">
                     <span className="text-white/60">Serviço</span>
                     <span className="text-white">
-                      {services.find((s) => s.id === selectedService)?.name}
+                      {services.find(s => s.id === selectedService)?.name}
                     </span>
                   </div>
                   <div className="flex items-center justify-between pb-4 border-b border-white/10">
@@ -247,13 +264,13 @@ export function NewAppointment() {
                   <div className="flex items-center justify-between pb-4 border-b border-white/10">
                     <span className="text-white/60">Duração</span>
                     <span className="text-white">
-                      {services.find((s) => s.id === selectedService)?.duration}
+                      {services.find(s => s.id === selectedService)?.duration}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-white/60">Valor</span>
                     <span className="text-white text-xl">
-                      {services.find((s) => s.id === selectedService)?.price}
+                      {services.find(s => s.id === selectedService)?.price}
                     </span>
                   </div>
                 </div>

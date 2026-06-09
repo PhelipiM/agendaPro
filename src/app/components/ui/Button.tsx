@@ -16,7 +16,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           'disabled:opacity-50 disabled:cursor-not-allowed',
           {
             'bg-white text-black hover:bg-white/90': variant === 'primary',
-            'bg-white/10 text-white hover:bg-white/15 backdrop-blur-sm border border-white/10': variant === 'secondary',
+            'bg-white/10 text-white hover:bg-white/15 backdrop-blur-sm border border-white/10':
+              variant === 'secondary',
             'text-white hover:bg-white/5': variant === 'ghost',
             'bg-red-500 text-white hover:bg-red-600': variant === 'destructive',
           },

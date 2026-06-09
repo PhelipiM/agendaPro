@@ -37,7 +37,7 @@ export function Sidebar({ isAdmin = false }: SidebarProps) {
       </div>
 
       <nav className="flex-1 px-3">
-        {links.map((link) => {
+        {links.map(link => {
           const Icon = link.icon;
           const isActive = location.pathname === link.path;
 

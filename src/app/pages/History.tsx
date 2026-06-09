@@ -100,7 +100,7 @@ export function History() {
     },
   ];
 
-  const filteredAppointments = appointments.filter((app) => {
+  const filteredAppointments = appointments.filter(app => {
     if (filter === 'all') return true;
     return app.status === filter;
   });
@@ -136,9 +136,9 @@ export function History() {
 
   const stats = {
     total: appointments.length,
-    completed: appointments.filter((a) => a.status === 'completed').length,
-    cancelled: appointments.filter((a) => a.status === 'cancelled').length,
-    pending: appointments.filter((a) => a.status === 'pending').length,
+    completed: appointments.filter(a => a.status === 'completed').length,
+    cancelled: appointments.filter(a => a.status === 'cancelled').length,
+    pending: appointments.filter(a => a.status === 'pending').length,
   };
 
   return (
@@ -149,11 +149,16 @@ export function History() {
         <div className="max-w-6xl mx-auto">
           <div className="mb-8">
             <h1 className="text-3xl text-white mb-2">Histórico de Agendamentos</h1>
-            <p className="text-white/60">Visualize todos os seus agendamentos anteriores e futuros</p>
+            <p className="text-white/60">
+              Visualize todos os seus agendamentos anteriores e futuros
+            </p>
           </div>
 
           <div className="grid md:grid-cols-4 gap-4 mb-8">
-            <Card className="cursor-pointer hover:border-white/20 transition-colors" onClick={() => setFilter('all')}>
+            <Card
+              className="cursor-pointer hover:border-white/20 transition-colors"
+              onClick={() => setFilter('all')}
+            >
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-violet-500/10 flex items-center justify-center">
                   <Calendar className="w-6 h-6 text-violet-400" />
@@ -165,7 +170,10 @@ export function History() {
               </div>
             </Card>
 
-            <Card className="cursor-pointer hover:border-white/20 transition-colors" onClick={() => setFilter('completed')}>
+            <Card
+              className="cursor-pointer hover:border-white/20 transition-colors"
+              onClick={() => setFilter('completed')}
+            >
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-green-500/10 flex items-center justify-center">
                   <CheckCircle2 className="w-6 h-6 text-green-400" />
@@ -177,7 +185,10 @@ export function History() {
               </div>
             </Card>
 
-            <Card className="cursor-pointer hover:border-white/20 transition-colors" onClick={() => setFilter('pending')}>
+            <Card
+              className="cursor-pointer hover:border-white/20 transition-colors"
+              onClick={() => setFilter('pending')}
+            >
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-yellow-500/10 flex items-center justify-center">
                   <AlertCircle className="w-6 h-6 text-yellow-400" />
@@ -189,7 +200,10 @@ export function History() {
               </div>
             </Card>
 
-            <Card className="cursor-pointer hover:border-white/20 transition-colors" onClick={() => setFilter('cancelled')}>
+            <Card
+              className="cursor-pointer hover:border-white/20 transition-colors"
+              onClick={() => setFilter('cancelled')}
+            >
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-red-500/10 flex items-center justify-center">
                   <XCircle className="w-6 h-6 text-red-400" />
@@ -242,7 +256,7 @@ export function History() {
           </Card>
 
           <div className="space-y-3">
-            {filteredAppointments.map((appointment) => {
+            {filteredAppointments.map(appointment => {
               const statusConfig = getStatusConfig(appointment.status);
 
               return (
@@ -267,16 +281,16 @@ export function History() {
                             <Clock className="w-4 h-4" />
                             {appointment.time}
                           </span>
-                          {appointment.professional && (
-                            <span>{appointment.professional}</span>
-                          )}
+                          {appointment.professional && <span>{appointment.professional}</span>}
                           <span className="text-white">{appointment.price}</span>
                         </div>
                       </div>
                     </div>
 
                     <div className="flex items-center gap-3">
-                      <span className={`px-4 py-2 rounded-lg text-sm flex items-center gap-2 ${statusConfig.color}`}>
+                      <span
+                        className={`px-4 py-2 rounded-lg text-sm flex items-center gap-2 ${statusConfig.color}`}
+                      >
                         {statusConfig.icon}
                         {statusConfig.label}
                       </span>

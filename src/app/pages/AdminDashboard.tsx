@@ -1,7 +1,15 @@
 import { Sidebar } from '../components/Sidebar';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
-import { Calendar, DollarSign, Users, TrendingUp, CheckCircle2, Clock, XCircle } from 'lucide-react';
+import {
+  Calendar,
+  DollarSign,
+  Users,
+  TrendingUp,
+  CheckCircle2,
+  Clock,
+  XCircle,
+} from 'lucide-react';
 
 export function AdminDashboard() {
   const appointments = [
@@ -193,7 +201,7 @@ export function AdminDashboard() {
                   </tr>
                 </thead>
                 <tbody>
-                  {appointments.map((appointment) => (
+                  {appointments.map(appointment => (
                     <tr
                       key={appointment.id}
                       className="border-b border-white/5 hover:bg-white/5 transition-colors"

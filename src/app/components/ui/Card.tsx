@@ -12,9 +12,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
         ref={ref}
         className={cn(
           'rounded-2xl p-6',
-          glass
-            ? 'bg-white/5 backdrop-blur-md border border-white/10'
-            : 'bg-[#0a0a0f]',
+          glass ? 'bg-white/5 backdrop-blur-md border border-white/10' : 'bg-[#0a0a0f]',
           className
         )}
         {...props}

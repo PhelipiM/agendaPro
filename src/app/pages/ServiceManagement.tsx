@@ -55,7 +55,7 @@ export function ServiceManagement() {
   };
 
   const handleDelete = (id: number) => {
-    setServices(services.filter((s) => s.id !== id));
+    setServices(services.filter(s => s.id !== id));
   };
 
   return (
@@ -86,7 +86,7 @@ export function ServiceManagement() {
                       type="text"
                       placeholder="Ex: Corte de Cabelo"
                       value={formData.name}
-                      onChange={(e) => {
+                      onChange={e => {
                         setFormData({ ...formData, name: e.target.value });
                         setErrors({ ...errors, name: '' });
                       }}
@@ -100,7 +100,7 @@ export function ServiceManagement() {
                       type="text"
                       placeholder="Ex: 30 min"
                       value={formData.duration}
-                      onChange={(e) => {
+                      onChange={e => {
                         setFormData({ ...formData, duration: e.target.value });
                         setErrors({ ...errors, duration: '' });
                       }}
@@ -114,7 +114,7 @@ export function ServiceManagement() {
                       type="text"
                       placeholder="Ex: R$ 50,00"
                       value={formData.price}
-                      onChange={(e) => {
+                      onChange={e => {
                         setFormData({ ...formData, price: e.target.value });
                         setErrors({ ...errors, price: '' });
                       }}
@@ -145,7 +145,7 @@ export function ServiceManagement() {
           )}
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {services.map((service) => (
+            {services.map(service => (
               <Card key={service.id} className="hover:border-white/20 transition-all">
                 <div className="flex items-start justify-between mb-4">
                   <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center">

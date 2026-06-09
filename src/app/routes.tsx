@@ -1,49 +1,49 @@
-import { createBrowserRouter } from "react-router";
-import { LandingPage } from "./pages/LandingPage";
-import { Login } from "./pages/Login";
-import { Register } from "./pages/Register";
-import { ClientDashboard } from "./pages/ClientDashboard";
-import { NewAppointment } from "./pages/NewAppointment";
-import { AdminDashboard } from "./pages/AdminDashboard";
-import { ServiceManagement } from "./pages/ServiceManagement";
-import { History } from "./pages/History";
-import { Profile } from "./pages/Profile";
+import { createBrowserRouter } from 'react-router';
+import { LandingPage } from './pages/LandingPage';
+import { Login } from './pages/Login';
+import { Register } from './pages/Register';
+import { ClientDashboard } from './pages/ClientDashboard';
+import { NewAppointment } from './pages/NewAppointment';
+import { AdminDashboard } from './pages/AdminDashboard';
+import { ServiceManagement } from './pages/ServiceManagement';
+import { History } from './pages/History';
+import { Profile } from './pages/Profile';
 
 export const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     Component: LandingPage,
   },
   {
-    path: "/login",
+    path: '/login',
     Component: Login,
   },
   {
-    path: "/register",
+    path: '/register',
     Component: Register,
   },
   {
-    path: "/dashboard",
+    path: '/dashboard',
     Component: ClientDashboard,
   },
   {
-    path: "/appointment/new",
+    path: '/appointment/new',
     Component: NewAppointment,
   },
   {
-    path: "/admin",
+    path: '/admin',
     Component: AdminDashboard,
   },
   {
-    path: "/admin/services",
+    path: '/admin/services',
     Component: ServiceManagement,
   },
   {
-    path: "/history",
+    path: '/history',
     Component: History,
   },
   {
-    path: "/profile",
+    path: '/profile',
     Component: Profile,
   },
 ]);

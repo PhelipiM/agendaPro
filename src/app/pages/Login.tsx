@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router';
+import { useNavigate, Link } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { Calendar, ArrowLeft } from 'lucide-react';
@@ -11,7 +11,7 @@ export function Login() {
     password: '',
   });
 
-  console.log('Form Data:', formData);
+  // debug log removed
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -41,7 +41,8 @@ export function Login() {
       const listaDeUsuarios = JSON.parse(usuariosExistentesTexto);
 
       const usuarioEncontrado = listaDeUsuarios.find(
-        (u: any) => u.email === formData.email
+        (u: { email?: string; password?: string; id?: string; name?: string }) =>
+          u.email === formData.email
       );
 
       if (!usuarioEncontrado) {
@@ -57,19 +58,17 @@ export function Login() {
       const sessãoUsuario = {
         id: usuarioEncontrado.id,
         name: usuarioEncontrado.name,
-        email: usuarioEncontrado.email
+        email: usuarioEncontrado.email,
       };
 
       localStorage.setItem('usuario_logado', JSON.stringify(sessãoUsuario));
 
       navigate('/dashboard');
-
     } catch (error) {
-      console.error("Erro ao autenticar:", error);
+      console.error('Erro ao autenticar:', error);
       setErrors({ api: 'Erro no navegador ao tentar fazer login.' });
     }
   };
-  
 
   return (
     <div className="min-h-screen bg-[#050508] flex items-center justify-center p-6">
@@ -102,7 +101,7 @@ export function Login() {
                 type="email"
                 placeholder="seu@email.com"
                 value={formData.email}
-                onChange={(e) => {
+                onChange={e => {
                   setFormData({ ...formData, email: e.target.value });
                   setErrors({ ...errors, email: '' });
                 }}
@@ -116,7 +115,7 @@ export function Login() {
                 type="password"
                 placeholder="••••••••"
                 value={formData.password}
-                onChange={(e) => {
+                onChange={e => {
                   setFormData({ ...formData, password: e.target.value });
                   setErrors({ ...errors, password: '' });
                 }}

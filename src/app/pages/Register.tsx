@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router';
+import { useNavigate, Link } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { Calendar, ArrowLeft, CheckCircle2 } from 'lucide-react';
@@ -47,15 +47,15 @@ export function Register() {
       return;
     }
     try {
-      const usuariosExistentesTexto = localStorage.getItem("usuarios_cadastrados") || "[]";
+      const usuariosExistentesTexto = localStorage.getItem('usuarios_cadastrados') || '[]';
 
       const listaDeUsuarios = JSON.parse(usuariosExistentesTexto);
 
       const emailJaExiste = listaDeUsuarios.some(
-        (u: any) => u.email === formData.email,
+        (u: { email?: string }) => u.email === formData.email
       );
       if (emailJaExiste) {
-        setErrors({ email: "Este email já está cadastrado!" });
+        setErrors({ email: 'Este email já está cadastrado!' });
         return;
       }
 
@@ -68,17 +68,17 @@ export function Register() {
 
       listaDeUsuarios.push(novoUsuario);
 
-      localStorage.setItem("usuarios_cadastrados", JSON.stringify(listaDeUsuarios));
+      localStorage.setItem('usuarios_cadastrados', JSON.stringify(listaDeUsuarios));
 
-      localStorage.setItem("usuario_logado", JSON.stringify(novoUsuario));
+      localStorage.setItem('usuario_logado', JSON.stringify(novoUsuario));
 
-      alert("Conta criada com sucesso!");
-      navigate("/dashboard");
+      alert('Conta criada com sucesso!');
+      navigate('/dashboard');
     } catch (error) {
-      console.error("Erro ao registrar usuário:", error);
-      alert("Houve um erro técnico ao salvar seu cadastro no navegador.");
+      console.error('Erro ao registrar usuário:', error);
+      alert('Houve um erro técnico ao salvar seu cadastro no navegador.');
     }
-    navigate("/dashboard");
+    // redundant navigation removed (already navigates inside the try on success)
   };
 
   const passwordStrength = () => {
@@ -129,7 +129,7 @@ export function Register() {
                 type="text"
                 placeholder="João Silva"
                 value={formData.name}
-                onChange={(e) => {
+                onChange={e => {
                   setFormData({ ...formData, name: e.target.value });
                   setErrors({ ...errors, name: '' });
                 }}
@@ -143,7 +143,7 @@ export function Register() {
                 type="email"
                 placeholder="seu@email.com"
                 value={formData.email}
-                onChange={(e) => {
+                onChange={e => {
                   setFormData({ ...formData, email: e.target.value });
                   setErrors({ ...errors, email: '' });
                 }}
@@ -157,7 +157,7 @@ export function Register() {
                 type="password"
                 placeholder="••••••••"
                 value={formData.password}
-                onChange={(e) => {
+                onChange={e => {
                   setFormData({ ...formData, password: e.target.value });
                   setErrors({ ...errors, password: '' });
                 }}
@@ -181,9 +181,15 @@ export function Register() {
                       />
                     ))}
                   </div>
-                  <p className={`text-xs ${
-                    strength <= 1 ? 'text-red-400' : strength === 2 ? 'text-yellow-400' : 'text-green-400'
-                  }`}>
+                  <p
+                    className={`text-xs ${
+                      strength <= 1
+                        ? 'text-red-400'
+                        : strength === 2
+                        ? 'text-yellow-400'
+                        : 'text-green-400'
+                    }`}
+                  >
                     {label}
                   </p>
                 </div>
@@ -196,7 +202,7 @@ export function Register() {
                 type="password"
                 placeholder="••••••••"
                 value={formData.confirmPassword}
-                onChange={(e) => {
+                onChange={e => {
                   setFormData({ ...formData, confirmPassword: e.target.value });
                   setErrors({ ...errors, confirmPassword: '' });
                 }}
