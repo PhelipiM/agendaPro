@@ -6,6 +6,8 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite",
+    "backend:dev": "mvn -f backend/pom.xml spring-boot:run",
+    "backend:build": "mvn -f backend/pom.xml clean package",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,md,html}\"",
     "test": "vitest"
   },
